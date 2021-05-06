@@ -67,14 +67,14 @@ To explore the content inside the container. When the bash command is not availa
     
 ## Docker file
 
-The next sample is the basic structure of a static image created using a Dockerfile. This file has no extension and just this plain name
+The next example is the basic structure of a static image created using a Dockerfile. This file has no extension and just this name
 
     FROM nginx:latest
     ADD . /usr/share/nginx/html
     
-Where FROM is the base image and ADD is the instruction. The dot is used because the Dockerfile was created in the same folder. The next route is where the content should be placed.
+Where FROM is the base image and ADD is the instruction. The dot is used because the Dockerfile was created in the same folder, the next route is where the content should be placed.
 
-To create the Docker file, use the next command. Where we tag the version and with the dot indicates where the files are located, for this example in the same directory
+To create the Docker image, use the bellow command. Where we tag the version and with the dot indicates where the files are located, for this case in the same directory
 
     docker build --tag website:latest .
     
@@ -84,8 +84,8 @@ In order to use the recent image created, we can run this command
     
 ## Creating a Docker file with app
 
-For this example, let's say we have a simple NodeJS app that says "Hello world"
-To create the Dockerfile we need, the base image (FROM), the directory (WORKDIR), from where to where (ADD), the command to run if necesary, in this case to install dependencies of the Node sample; and finally the instruction to run the application
+For this scenario, let's say we have a simple NodeJS application that says "Hello world"
+To create the Dockerfile we need the base image (FROM), the directory (WORKDIR), from where to where (ADD), the command to run if necesary (in this case to install dependencies of the Node sample) and finally the instruction to run the application
 
     FROM node:latest
     WORKDIR /app
@@ -110,7 +110,7 @@ To ignore files from being copied, we can create a .dockerignore file. Inside th
 
 ## Caching and layers
 
-The caching system allows us to avoid repetitive tasks while the image is being created, like copying files or compiling sources. This is useful when the only changes between images versions are the sources
+The caching system allows us to avoid repetitive tasks while the image is being created, like copying files or compiling instructions. This is useful when the only changes between images versions are the sources
 
     FROM node:latest
     WORKDIR /app
@@ -121,7 +121,8 @@ The caching system allows us to avoid repetitive tasks while the image is being 
     
 ## Tags
 
-How to move our latest image to a previous one with a tag. Taggin allows not only version control but also a fast way to change the running container if a rollback is needed
+How to move our latest image to a previous one with a tag. 
+Taggin allows not only version control but also a fast way to change the running container if a rollback is needed
 
     docker tag my-website:latest my-website:1
     
@@ -141,7 +142,7 @@ This is a way to fully get information about containers
 
 ## Logs
 
-Monitor any event that is registered by the application. Use -f for tail mode
+Monitor any event that is registered by the application or container. Use -f for tail mode
 
     docker logs <image_name | id (also first 3 characters)>
     docker logs -f <image_name | id (also first 3 characters)>
@@ -150,4 +151,4 @@ Monitor any event that is registered by the application. Use -f for tail mode
 
 - Always try to use Apline versions for small size
 - Docker images are immutable, if you try to override a tag during compilation of the same image, you will end up with <none> tag images
-- To get detailed information about any Docker command, we type *docker command --help*
+- To get detailed information about any Docker command, we type *docker {command} --help*
