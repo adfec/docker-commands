@@ -10,7 +10,7 @@ List all the images available
 
     docker images
 
-List all the containers that have runned
+List all the containers that you have runned
 
     docker ps -a
     
@@ -20,6 +20,11 @@ Remove the specified container
     docker rm website
     docker rm 3f4j2j542ji3
     docker rm 3f4
+    
+To remove an image
+
+    docker image rm <image_name | id (also first 3 characters)>
+    docker rmi <image_name | id (also first 3 characters)>
     
 Force the remove even if the container is running
 
@@ -52,13 +57,17 @@ Volumes are useful for development process
     docker run --name website -v E:/html:/usr/share/nginx/html:ro -d -p 3000:80 nginx
     docker run --name website -v E:/html:/usr/share/nginx/html -d -p 3000:80 nginx
     
-Run sharing volume between containers
+Sharing volume between containers as a copy
 
     docker run --name website-copy --volumes-from website -d -p 8080:80 nginx
     
+To explore the content inside the container. When the bash command is not available, first you need to inspect (find below) the container and look for "Cmd", there you might find the right way to invoke the console
+
+    docker exec -it website bash
+    
 ## Docker file
 
-The next sample is the basic structure of a static image created using a Dockerfile. This file has no extensio and just this plain name
+The next sample is the basic structure of a static image created using a Dockerfile. This file has no extension and just this plain name
 
     FROM nginx:latest
     ADD . /usr/share/nginx/html
@@ -72,3 +81,73 @@ To create the Docker file, use the next command. Where we tag the version and wi
 In order to use the recent image created, we can run this command
 
     docker run --name website -d -p 8080:80 website:latest
+    
+## Creating a Docker file with app
+
+For this example, let's say we have a simple NodeJS app that says "Hello world"
+To create the Dockerfile we need, the base image (FROM), the directory (WORKDIR), from where to where (ADD), the command to run if necesary, in this case to install dependencies of the Node sample; and finally the instruction to run the application
+
+    FROM node:latest
+    WORKDIR /app
+    ADD . .
+    RUN npm install
+    CMD node index.js
+    
+Example with Spring Boot application
+
+    FROM openjdk:8-jre-alpine
+    COPY "target/app-0.0.1-SNAPSHOT.jar" "app.jar"
+    EXPOSE 8080
+    ENTRYPOINT ["java","-jar","app.jar"]
+    
+To ignore files from being copied, we can create a .dockerignore file. Inside the file you can list folders or files to ignore. For example:
+
+    node_modules
+    Dockerfile
+    .git
+    *.ts
+    folder/**
+
+## Caching and layers
+
+The caching system allows us to avoid repetitive tasks while the image is being created, like copying files or compiling sources. This is useful when the only changes between images versions are the sources
+
+    FROM node:latest
+    WORKDIR /app
+    ADD package*.json ./
+    RUN npm install
+    ADD . .
+    CMD node index.js
+    
+## Tags
+
+How to move our latest image to a previous one with a tag. Taggin allows not only version control but also a fast way to change the running container if a rollback is needed
+
+    docker tag my-website:latest my-website:1
+    
+When you want to load your image to the Docker registry
+
+    docker tag my-website:1 mydockeraccount/my-website:1
+    
+Before you upload your images, you need to log in: _docker login_
+
+    docker push mydockeraccount/my-website:1
+
+## Inspect
+
+This is a way to fully get information about containers
+
+    docker inspect <image_name | id (also first 3 characters)>
+
+## Logs
+
+Monitor any event that is registered by the application. Use -f for tail mode
+
+    docker logs <image_name | id (also first 3 characters)>
+    docker logs -f <image_name | id (also first 3 characters)>
+
+## Considerations
+
+- Always try to use Apline versions for small size
+- Docker images are immutable, if you try to override a tag during compilation of the same image, you will end up with <none> tag images
+- To get detailed information about any Docker command, we type *docker <command> --help*
