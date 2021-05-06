@@ -150,4 +150,4 @@ Monitor any event that is registered by the application. Use -f for tail mode
 
 - Always try to use Apline versions for small size
 - Docker images are immutable, if you try to override a tag during compilation of the same image, you will end up with <none> tag images
-- To get detailed information about any Docker command, we type _docker <command> --help_
+- To get detailed information about any Docker command, we type *docker command --help*
