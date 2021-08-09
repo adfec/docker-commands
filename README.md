@@ -100,6 +100,29 @@ Example with Spring Boot application
     EXPOSE 8080
     ENTRYPOINT ["java","-jar","app.jar"]
     
+Example with Spring Boot and Packeto.io (buildpack)
+
+First you need to update the pom.xml definition as shown
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>myapp/${project.artifactId}</name>
+					</image>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+    
+Then you can run 
+ 
+    mvn spring-boot:build-image 
+
+    
 To ignore files from being copied, we can create a .dockerignore file. Inside the file you can list folders or files to ignore. For example:
 
     node_modules
