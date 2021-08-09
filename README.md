@@ -123,7 +123,7 @@ Then you can run
     mvn spring-boot:build-image 
 
     
-To ignore files from being copied, we can create a .dockerignore file. Inside the file you can list folders or files to ignore. For example:
+To ignore files from being copied, we can create a _.dockerignore_ file. Inside the file you can list folders or files to ignore. For example:
 
     node_modules
     Dockerfile
@@ -169,6 +169,11 @@ Monitor any event that is registered by the application or container. Use -f for
 
     docker logs <image_name | id (also first 3 characters)>
     docker logs -f <image_name | id (also first 3 characters)>
+
+## Docker Compose
+
+Multiple containers at once. By default the feature is installed with the Windows installer.
+To verify you can use _docker-compose_ version or _docker-compose --version_
 
 ## Considerations
 
