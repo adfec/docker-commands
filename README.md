@@ -244,6 +244,8 @@ Example for a multi-environment
 	      - "8081:8081"
 	    networks:
 	      - myapp-network
+	    depends_on:
+	      - configserver
 	    environment:
 	      SPRING_PROFILES_ACTIVE: default (or profile required)
 	      SPRING_CONFIG_IMPORT: configserver:http://configserver:8070/
