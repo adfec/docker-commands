@@ -173,7 +173,40 @@ Monitor any event that is registered by the application or container. Use -f for
 ## Docker Compose
 
 Multiple containers at once. By default the feature is installed with the Windows installer.
-To verify you can use _docker-compose_ version or _docker-compose --version_
+To verify you can use _docker-compose_ version or _docker-compose --version_ The file name must be docker-compose.yml
+In order to run the command is _docker-compuse up_
+
+	version: "3.9"  # optional since v1.27.0
+	services:
+	  app1:
+	    build: .
+	    ports:
+	      - "5000:5000"
+	    volumes:
+	      - .:/code
+	      - logvolume01:/var/log
+	    links:
+	      - app2
+	  app2:
+	    image: redis
+	  app3:
+	    image: myapp/service1:latest (image name)
+	    mem_limit: 700m
+	    ports:
+	      - "8080:8080"
+	    networks:
+	      - myapp-network
+	  app4:
+	    image: myapp/service2:latest (image name)
+	    mem_limit: 700m
+	    ports:
+	      - "8081:8081"
+	    networks:
+	      - myapp-network
+	networks:
+	  myapp-network
+	volumes:
+	  logvolume01: {}
 
 ## Considerations
 
