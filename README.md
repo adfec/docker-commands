@@ -207,6 +207,48 @@ In order to run the command is _docker-compuse up_
 	  myapp-network
 	volumes:
 	  logvolume01: {}
+	  
+Example for a multi-environment
+
+	version: "3.9"  # optional since v1.27.0
+	
+	services:
+	  configserver:
+	    image: myapp/configserver:latest
+	    ports:
+	       - "8070:8070"
+	    networks:
+	      - myapp-network
+	  app1:
+	    image: myapp/service1:latest
+	    mem_limit: 700m
+	    ports:
+	      - "8080:8080"
+	    networks:
+	      - myapp-network
+	    depends_on:
+	      - configserver
+	    deploy:
+	      restart_policy:
+	        condition: on-failure
+		delay: 5s
+		max_attempts: 3
+		window: 120s
+	    environment:
+	      SPRING_PROFILES_ACTIVE: default (or profile required)
+	      SPRING_CONFIG_IMPORT: configserver:http://configserver:8070/
+	  app2:
+	    image: myapp/service2:latest
+	    mem_limit: 700m
+	    ports:
+	      - "8081:8081"
+	    networks:
+	      - myapp-network
+	    environment:
+	      SPRING_PROFILES_ACTIVE: default (or profile required)
+	      SPRING_CONFIG_IMPORT: configserver:http://configserver:8070/
+	networks:
+	  myapp-network
 
 ## Considerations
 
